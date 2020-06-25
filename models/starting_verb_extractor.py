@@ -3,29 +3,28 @@ import pandas as pd
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import WhitespaceTokenizer 
 import re
+
+nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger'])
 
 def tokenize(text):
     """
     Remove capitalization and special characters and lemmatize texts
     """    
+    url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+    detected_urls = re.findall(url_regex, text)
+    for url in detected_urls:
+        text = text.replace(url, "urlplaceholder")
 
-    # get tokens from text
-    tokens = WhitespaceTokenizer().tokenize(text)
+    tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
-    
-    # clean tokens
-    processed_tokens = []
-    for token in tokens:
-        token = lemmatizer.lemmatize(token).lower().strip('!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~')
-        token = re.sub(r'\[[^.,;:]]*\]', '', token)
-        
-        # add token to compiled list if not empty
-        if token != '':
-            processed_tokens.append(token)
-        
-    return processed_tokens
+
+    clean_tokens = []
+    for tok in tokens:
+        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
+        clean_tokens.append(clean_tok)
+
+    return clean_tokens
 
 class StartingVerbExtractor(BaseEstimator, TransformerMixin):
     """

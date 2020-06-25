@@ -19,7 +19,6 @@ import numpy as np
 import pandas as pd
 from sqlalchemy import create_engine
 
-
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer, accuracy_score, f1_score, fbeta_score, classification_report
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier,AdaBoostClassifier
@@ -31,7 +30,12 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from scipy.stats import hmean
 from scipy.stats.mstats import gmean
 
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
 nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger'])
+
 
 from starting_verb_extractor import StartingVerbExtractor
 
