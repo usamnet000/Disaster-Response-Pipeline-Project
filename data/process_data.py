@@ -68,6 +68,7 @@ def clean_data(messages,categories):
     # convert column from string to int
     for column in df.iloc[:,3:].columns:
         df[column] = df[column].astype(np.int)
+    df['related'][df['related']==2]=1
     return df
 
 def save_data(df, database_filename):
