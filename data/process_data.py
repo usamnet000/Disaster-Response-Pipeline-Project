@@ -40,8 +40,6 @@ def clean_data(messages,categories):
     Outputs:
         df -> clean data Pandas DataFrame
     """
-    # fill null values in column original with mode
-    messages['original'].fillna(messages['original'].mode()[0], inplace=True)
 
     # dropping ALL duplicte values 
     messages.drop_duplicates(subset ="id", keep = False, inplace = True)
@@ -68,7 +66,7 @@ def clean_data(messages,categories):
     df = pd.merge(left=messages, right=categories, left_index=True, right_index=True, on = ['id'], how='left')
     df  = df.dropna()# Drop any row with a missing value
     # convert column from string to int
-    for column in df.iloc[:,6:].columns:
+    for column in df.iloc[:,3:].columns:
         df[column] = df[column].astype(np.int)
     return df
 
@@ -81,7 +79,7 @@ def save_data(df, database_filename):
         database_filename -> database file (.db) destination path
     """
     engine = create_engine('sqlite:///'+ database_filename)
-    df.to_sql('merged', engine, index=False)
+    df.to_sql('merged', engine, index=False,if_exists='replace')
     pass  
 
 

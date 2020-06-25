@@ -1,4 +1,31 @@
 ﻿from sklearn.base import BaseEstimator, TransformerMixin
+import pandas as pd
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import WhitespaceTokenizer 
+import re
+
+def tokenize(text):
+    """
+    Remove capitalization and special characters and lemmatize texts
+    """    
+
+    # get tokens from text
+    tokens = WhitespaceTokenizer().tokenize(text)
+    lemmatizer = WordNetLemmatizer()
+    
+    # clean tokens
+    processed_tokens = []
+    for token in tokens:
+        token = lemmatizer.lemmatize(token).lower().strip('!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~')
+        token = re.sub(r'\[[^.,;:]]*\]', '', token)
+        
+        # add token to compiled list if not empty
+        if token != '':
+            processed_tokens.append(token)
+        
+    return processed_tokens
 
 class StartingVerbExtractor(BaseEstimator, TransformerMixin):
     """

@@ -13,15 +13,12 @@ Arguments:
 
 # import libraries
 import pickle
-
+import sys
 import re
 import numpy as np
 import pandas as pd
 from sqlalchemy import create_engine
 
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
 
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer, accuracy_score, f1_score, fbeta_score, classification_report
@@ -51,9 +48,9 @@ def load_data(database_filepath):
         category_names -> used for data visualization (app)
     """
     engine = create_engine('sqlite:///'+database_filepath)
-    df = pd.read_sql_table('df',engine)
+    df = pd.read_sql_table('merged',engine)
     X = df['message']
-    Y = df.iloc[:,4:]
+    Y = df.iloc[:,3:]
     category_names = Y.columns
     return X, Y, category_names
 
